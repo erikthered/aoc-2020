@@ -1,7 +1,3 @@
-import java.io.File
-
-fun getInputLines(fileName: String) = File(ClassLoader.getSystemResource(fileName).toURI()).readLines()
-
 fun findTwoAddends(candidates: List<Int>, sum: Int): Pair<Int, Int>? {
     for ((idx, entry) in candidates.withIndex()) {
         for (entry2 in candidates.subList(idx + 1, candidates.size)) {
