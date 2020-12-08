@@ -1,12 +1,9 @@
 class Graph<T> {
-    val adjacencyMap = hashMapOf<T, HashSet<T>>()
+    private val adjacencyMap = hashMapOf<T, HashSet<T>>()
 
     fun addEdge(source: T, dest: T) {
-        adjacencyMap
-            .computeIfAbsent(source) { HashSet() }
-            .add(dest)
-        adjacencyMap
-            .computeIfAbsent(dest) { HashSet() }
+        adjacencyMap.computeIfAbsent(source) { HashSet() } += dest
+        adjacencyMap.computeIfAbsent(dest) { HashSet() }
     }
 
     fun depthTraversal(root: T): Set<T> {
@@ -29,4 +26,21 @@ class Graph<T> {
             append(adjacencyMap[key]?.joinToString(", ", "[", "]\n"))
         }
     }.toString()
+}
+
+class IntWeightedGraph<T> {
+    private val map = hashMapOf<T, HashMap<T, Int>>()
+
+    fun addEdge(source: T, dest: Pair<T, Int>) {
+        map.computeIfAbsent(source) { HashMap() } += dest
+        map.computeIfAbsent(dest.first) { HashMap() }
+    }
+
+    fun sumFrom(source: T): Int {
+        val edgeMap = map[source] ?: emptyMap()
+        return edgeMap.map { (node, weight) ->
+            val sum = sumFrom(node)
+            weight * sum
+        }.sum() + 1
+    }
 }
